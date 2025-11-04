@@ -1,0 +1,29 @@
+import { relations } from "drizzle-orm";
+import { integer, pgEnum, pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
+
+export const ownerRoleEnum = pgEnum("owner_role", ["group", "user"]);
+
+export const RobotsTable = pgTable("robots", {
+  id: uuid("id").primaryKey().defaultRandom(),
+
+  serial_number: varchar("serial_number", { length: 100 }).notNull(),
+  name: varchar("name", { length: 100 }).notNull(),
+  ownerId: varchar("owner_id", { length: 100 }).notNull(),
+  ownerType: ownerRoleEnum("owner_type").notNull(),
+});
+
+export const RobotSettingsTable = pgTable("robot_settings", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  robotId: uuid("robot_id")
+    .references(() => RobotsTable.id, { onDelete: "cascade" })
+    .notNull(),
+  userId: varchar("user_id", { length: 100 }).notNull(),
+  settings: text("settings").notNull(),
+});
+
+export const robotSettingsRelations = relations(RobotSettingsTable, ({ one }) => ({
+  robot: one(RobotsTable, {
+    fields: [RobotSettingsTable.robotId],
+    references: [RobotsTable.id],
+  }),
+}));
