@@ -1,9 +1,13 @@
 import express from "express";
+import { toNodeHandler } from "better-auth/node";
+
+import { router as robotRoutes } from "./features/robots/robot-routes.js";
+import { auth } from "#lib/auth.js";
+
 const app = express();
 const port = process.env.PORT;
 
-import { router as robotRoutes } from "./features/robots/robot-routes.js";
-
+app.all("/api/auth/{*any}", toNodeHandler(auth));
 app.use("/robots", robotRoutes);
 
 app.get("/", (req, res) => {

@@ -9,6 +9,7 @@ console.log(connectionInfo)
 const pool = new Pool(connectionInfo);
 const db = drizzle({ client: pool, schema });
 
+
 export type Database = typeof db;
 
 export { db };
