@@ -3,6 +3,7 @@ import { LoginPage } from "@/pages/login-page";
 import { NotFoundPage } from "@/pages/not-found-page";
 import { createBrowserRouter } from "react-router";
 import type { RouteObject } from "react-router";
+import { HomePage } from "@/pages/home-page";
 
 export const routes: RouteObject[] = [
   {
@@ -12,7 +13,7 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <div>Main</div>,
+        element: <HomePage />,
       },
       {
         path: "login",

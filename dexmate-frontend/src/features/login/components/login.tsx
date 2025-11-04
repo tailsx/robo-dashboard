@@ -1,8 +1,22 @@
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SignUpCard } from "./sign-up";
+import { SignInCard } from "./sign-in";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { authClient } from "@/lib/auth-client";
 
 export function Login() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    authClient.getSession().then(({ data: session }) => {
+      if (session) {
+        navigate("/");
+      }
+    });
+  }, []);
+
   return (
     <Tabs defaultValue="signin">
       <TabsList>
@@ -11,15 +25,11 @@ export function Login() {
       </TabsList>
       <Card>Login Component</Card>;
       <TabsContent value="signin">
-        <SignIn />
+        <SignInCard />
       </TabsContent>
       <TabsContent value="signup">
         <SignUpCard />
       </TabsContent>
     </Tabs>
   );
-}
-
-function SignIn() {
-  return <Card>Sign In Component</Card>;
 }
