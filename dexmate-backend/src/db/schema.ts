@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { integer, pgEnum, pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const ownerRoleEnum = pgEnum("owner_role", ["group", "user"]);
 
@@ -27,3 +28,7 @@ export const robotSettingsRelations = relations(RobotSettingsTable, ({ one }) =>
     references: [RobotsTable.id],
   }),
 }));
+
+export const robotSchema = createSelectSchema(RobotsTable);
+export const createRobotSchema = createInsertSchema(RobotsTable);
+export const updateRobotSchema = createRobotSchema.partial();

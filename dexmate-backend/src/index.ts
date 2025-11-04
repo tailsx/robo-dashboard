@@ -1,6 +1,10 @@
 import express from "express";
 const app = express();
-const port = "3000";
+const port = process.env.PORT;
+
+import { router as robotRoutes } from "./features/robots/robot-routes.js";
+
+app.use("/robots", robotRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
