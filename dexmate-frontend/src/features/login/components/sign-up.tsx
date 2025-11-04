@@ -37,6 +37,9 @@ function SignUpForm() {
         onError: (error) => {
           toast.error(error.error.message || "Failed to sign up");
         },
+        onSuccess: () => {
+          console.log("Sign up successful, please check your email.");
+        }
       }
     );
 
