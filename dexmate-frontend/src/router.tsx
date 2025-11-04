@@ -4,11 +4,14 @@ import { NotFoundPage } from "@/pages/not-found-page";
 import { createBrowserRouter } from "react-router";
 import type { RouteObject } from "react-router";
 import { HomePage } from "@/pages/home-page";
+import { AppLayout } from "./layouts/app-layout";
+import { RobotsPage } from "./pages/robots-page";
+import { GroupsPage } from "./pages/groups-page";
 
 export const routes: RouteObject[] = [
   {
     path: "/",
-    element: <RootLayout />,
+    element: <AppLayout />,
     errorElement: <NotFoundPage />,
     children: [
       {
@@ -18,6 +21,14 @@ export const routes: RouteObject[] = [
       {
         path: "login",
         element: <LoginPage />,
+      },
+      {
+        path: "robots",
+        element: <RobotsPage />,
+      },
+      {
+        path: "groups",
+        element: <GroupsPage />,
       },
     ],
   },
