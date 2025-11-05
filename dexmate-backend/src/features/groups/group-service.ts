@@ -20,10 +20,26 @@ class GroupService {
 
   async addUserToGroup(data: CreateMemberSchema): Promise<void> {
     await this.db.insert(member).values({
-        organizationId: data.organizationId,
-        role: data.role,
-        userId: data.userId,
+      organizationId: data.organizationId,
+      role: data.role,
+      userId: data.userId,
     });
+  }
+
+  async getRobots(groupId: string): Promise<RobotDetail[]> {
+    const robots = await this.db.query.RobotsTable.findAll({
+      where: eq(RobotsTable.groupId, groupId),
+    });
+
+    return robots;
+  }
+
+  async addRobotToGroup(robotId:string, groupId:string) : Promise<RobotDetail>{
+    const robot = await this.db.update(RobotsTable).values({
+      groupId: groupId
+    }).where(eq(RobotsTable.id, robotId))
+
+    return robot
   }
 }
 
