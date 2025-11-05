@@ -16,7 +16,8 @@ type CreateRobotResponse = {
   id: string;
 };
 
-type RobotDetail = {
+export type RobotDetail = {
+  id: string;
   serial_number: string;
   name: string;
   ownerId: string;
@@ -24,7 +25,10 @@ type RobotDetail = {
 };
 
 type UserRobotSetting = {
-  json: string;
+  json: Record<string, string>;
+};
+type UserRobotSettingResponse = {
+  settings: string;
 };
 
 class AppClient {
@@ -41,6 +45,11 @@ class AppClient {
     return res;
   }
 
+  async getRobots() {
+    const res = await this.fetcher.get<RobotDetail[]>("/robots");
+    return res;
+  }
+
   async getRobot(robotId: string) {
     const res = await this.fetcher.get<RobotDetail>(`/robots/${robotId}`);
 
@@ -48,7 +57,16 @@ class AppClient {
   }
 
   async getUserRobotSetting(robotId: string): Promise<UserRobotSetting> {
-    const res = await this.fetcher.get<UserRobotSetting>(`/robots/${robotId}/settings/user`);
+    const res = await this.fetcher.get<UserRobotSettingResponse>(`/robots/${robotId}/settings/user`);
+
+    return {
+      json: JSON.parse(res.settings),
+    };
+  }
+
+  async createUserRobotSetting(robotId: string, json: Record<string, string>): Promise<void> {
+    const res = this.fetcher.post<void>(`/robots/${robotId}/settings/user`, json);
+
     return res;
   }
 }
@@ -57,4 +75,3 @@ console.log(config);
 const appClient = new AppClient({ baseUrl: config.BASE_URL });
 
 export { appClient };
-export type { RobotDetail };

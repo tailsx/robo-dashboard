@@ -35,12 +35,37 @@ router.get(
   })
 );
 
+router.get(
+  "/:robotId/settings/user",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const user = req.user!;
+    const robotId = req.params.robotId;
+    const settings = await robotService.getUserRobotSettings(user.id, robotId);
+
+    res.success(settings);
+  })
+);
+
+router.post(
+  "/:robotId/settings/user",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const user = req.user!;
+    const robotId = req.params.robotId;
+    const settings = req.body;
+
+    const setting = await robotService.createUserRobotSetting(user.id, robotId, settings);
+    res.success(setting, 201);
+  })
+);
+
 router.post(
   "/",
   requireAuth,
   asyncHandler(async (req, res) => {
-    const user = req.user;
-    const newRobot = await robotService.createRobot(req.body);
+    const user = req.user!;
+    const newRobot = await robotService.createRobot(user.id, req.body);
     res.success(newRobot, 201);
   })
 );
