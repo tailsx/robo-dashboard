@@ -1,7 +1,3 @@
-import { createAuthClient } from "better-auth/react";
-import { organizationClient } from "better-auth/client/plugins";
-import { config } from "@/lib/config";
-
 import { createAccessControl } from "better-auth/plugins/access";
 
 const statement = {
@@ -23,18 +19,3 @@ const owner = ac.newRole({
 });
 
 export { ac, member, admin, owner, statement };
-
-export const authClient = createAuthClient({
-  baseURL: config.BASE_URL,
-  credentials: "include",
-  plugins: [
-    organizationClient({
-      ac,
-      roles: {
-        member,
-        admin,
-        owner,
-      },
-    }),
-  ],
-});

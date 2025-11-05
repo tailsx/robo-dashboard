@@ -8,6 +8,20 @@
       "when": 1762247731132,
       "tag": "0000_useful_miracleman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1762317983720,
+      "tag": "0001_typical_eddie_brock",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762319952692,
+      "tag": "0002_chubby_argent",
+      "breakpoints": true
     }
   ]
 }

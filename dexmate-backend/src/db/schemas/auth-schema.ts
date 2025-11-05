@@ -59,3 +59,25 @@ export const verification = pgTable("verification", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+
+export const organization = pgTable('organization', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  slug: text('slug').unique(),
+  logo: text('logo'),
+  createdAt: timestamp('createdAt').notNull(),
+  metadata: text('metadata'),
+});
+
+export const member = pgTable('member', {
+  id: text('id').primaryKey(),
+  organizationId: text('organizationId')
+    .notNull()
+    .references(() => organization.id, { onDelete: 'cascade' }),
+  userId: text('userId')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  role: text('role').notNull(), // 'owner', 'admin', 'member'
+  createdAt: timestamp('createdAt').notNull(),
+});
