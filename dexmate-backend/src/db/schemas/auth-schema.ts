@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
-import { createSelectSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -78,7 +78,8 @@ export const member = pgTable('member', {
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
   role: text('role').notNull(), // 'owner', 'admin', 'member'
-  createdAt: timestamp('createdAt').notNull(),
+  createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
 export const userGroups = createSelectSchema(organization);
+export const createMemberSchema = createInsertSchema(member);

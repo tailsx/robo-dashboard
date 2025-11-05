@@ -43,6 +43,20 @@
       "when": 1762329287095,
       "tag": "0005_fair_mephistopheles",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1762362289199,
+      "tag": "0006_plain_doctor_doom",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1762362369484,
+      "tag": "0007_exotic_arachne",
+      "breakpoints": true
     }
   ]
 }
