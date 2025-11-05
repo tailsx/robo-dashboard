@@ -1,5 +1,11 @@
+import { CreateRobotForm } from "@/features/robots/create-robot-form";
+
 function RobotsPage() {
-  return <div>Robots Page</div>;
+  return (
+    <div>
+      <CreateRobotForm />
+    </div>
+  );
 }
 
 export { RobotsPage };

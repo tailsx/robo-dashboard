@@ -17,7 +17,7 @@ class RobotService {
     return this.db.select().from(RobotsTable);
   }
 
-  async createRobot(data: CreateRobotSchema): Promise<RobotSchema["id"]> {
+  async createRobot(data: CreateRobotSchema): Promise<{ id: RobotSchema["id"] }> {
     const result = await this.db
       .insert(RobotsTable)
       .values({
@@ -29,7 +29,9 @@ class RobotService {
       .returning();
     console.log("Inserted robot:", result[0]);
 
-    return result[0].id;
+    return {
+      id: result[0].id,
+    };
   }
 }
 
