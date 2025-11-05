@@ -1,10 +1,6 @@
 import { config } from "@/lib/config";
 import { Fetcher } from "./fetcher";
 
-type RequestOptions = Omit<RequestInit, "body"> & {
-  body?: unknown;
-};
-
 type AppClientConfig = {
   baseUrl: string;
 };
@@ -20,6 +16,17 @@ type CreateRobotResponse = {
   id: string;
 };
 
+type RobotDetail = {
+  serial_number: string;
+  name: string;
+  ownerId: string;
+  ownerType: "user" | "group";
+};
+
+type UserRobotSetting = {
+  json: string;
+};
+
 class AppClient {
   private fetcher: Fetcher;
 
@@ -33,9 +40,21 @@ class AppClient {
 
     return res;
   }
+
+  async getRobot(robotId: string) {
+    const res = await this.fetcher.get<RobotDetail>(`/robots/${robotId}`);
+
+    return res;
+  }
+
+  async getUserRobotSetting(robotId: string): Promise<UserRobotSetting> {
+    const res = await this.fetcher.get<UserRobotSetting>(`/robots/${robotId}/settings/user`);
+    return res;
+  }
 }
 
 console.log(config);
 const appClient = new AppClient({ baseUrl: config.BASE_URL });
 
 export { appClient };
+export type { RobotDetail };

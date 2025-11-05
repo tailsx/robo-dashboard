@@ -7,6 +7,7 @@ import { HomePage } from "@/pages/home-page";
 import { AppLayout } from "./layouts/app-layout";
 import { RobotsPage } from "./pages/robots-page";
 import { GroupsPage } from "./pages/groups-page";
+import { RobotsDetailPage } from "./pages/robots-detail-page";
 
 export const routes: RouteObject[] = [
   {
@@ -25,6 +26,10 @@ export const routes: RouteObject[] = [
       {
         path: "robots",
         element: <RobotsPage />,
+      },
+      {
+        path: "robots/:robotId",
+        element: <RobotsDetailPage />,
       },
       {
         path: "groups",

@@ -17,6 +17,7 @@ export class Fetcher {
         "Content-Type": "application/json",
         ...headers,
       },
+      credentials: "include",
     };
 
     if (body !== undefined) {
@@ -32,7 +33,11 @@ export class Fetcher {
     const contentType = response.headers.get("content-type");
 
     if (contentType?.includes("application/json")) {
-      return await response.json();
+      const res = await response.json();
+
+      if (res.success) {
+        return res.data as T;
+      }
     }
 
     return (await response.text()) as T;
