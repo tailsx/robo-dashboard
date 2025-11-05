@@ -3,6 +3,8 @@ import { RobotsTable } from "#db/schema.js";
 import { db } from "#db/database.js";
 import type { Database } from "#db/database.js";
 import { createRobotSchema, robotSchema } from "#db/schemas/app-schemas.js";
+import { eq } from "drizzle-orm";
+import { NotFoundError } from "#utils/errors.js";
 
 type CreateRobotSchema = z.infer<typeof createRobotSchema>;
 type RobotSchema = z.infer<typeof robotSchema>;
@@ -13,8 +15,20 @@ class RobotService {
     this.db = db;
   }
 
-  async getAllRobots() {
-    return this.db.select().from(RobotsTable);
+  async getAllRobots(ownerId: string): Promise<RobotSchema[]> {
+    return this.db.select().from(RobotsTable).where(eq(RobotsTable.ownerId, ownerId));
+  }
+
+  async getRobotById(robotId: RobotSchema["id"]): Promise<RobotSchema | undefined> {
+    const result = await this.db.query.RobotsTable.findFirst({
+      where: eq(RobotsTable.id, robotId),
+    });
+
+    if (!result) {
+      throw new NotFoundError("Robot not found");
+    }
+
+    return result;
   }
 
   async createRobot(data: CreateRobotSchema): Promise<{ id: RobotSchema["id"] }> {
@@ -27,7 +41,6 @@ class RobotService {
         ownerType: data.ownerType,
       })
       .returning();
-    console.log("Inserted robot:", result[0]);
 
     return {
       id: result[0].id,

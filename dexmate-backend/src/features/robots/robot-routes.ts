@@ -1,24 +1,47 @@
 import { Router } from "express";
 import { RobotService } from "./robot-service.js";
-import { DatabaseError } from "#utils/errors.js";
+import { DatabaseError, NotFoundError } from "#utils/errors.js";
 import { asyncHandler } from "#middleware/async-handler.js";
+import { requireAuth } from "#middleware/auth-middleware.js";
 
 const router = Router();
 const robotService = new RobotService();
 
 router.get(
   "/",
+  requireAuth,
   asyncHandler(async (req, res) => {
-    const robots = await robotService.getAllRobots();
-    res.json(robots);
+    const user = req.user!;
+    const robots = await robotService.getAllRobots(user.id);
+
+    res.success(robots);
+  })
+);
+
+router.get(
+  "/:robotId",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const user = req.user!;
+    const robotId = req.params.robotId;
+
+    const robot = await robotService.getRobotById(robotId);
+
+    if (robot && robot.ownerId !== user.id) {
+      throw new NotFoundError("Not found " + robotId);
+    }
+
+    res.success(robot);
   })
 );
 
 router.post(
   "/",
+  requireAuth,
   asyncHandler(async (req, res) => {
+    const user = req.user;
     const newRobot = await robotService.createRobot(req.body);
-    res.status(201).json(newRobot);
+    res.success(newRobot, 201);
   })
 );
 

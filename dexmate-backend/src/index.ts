@@ -6,6 +6,7 @@ import type { CorsOptions } from "cors";
 import { router as robotRoutes } from "./features/robots/robot-routes.js";
 import { auth } from "#lib/auth.js";
 import { errorHandler } from "#middleware/error-handler.js";
+import { responseHandler } from "#middleware/response-handler.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -28,7 +29,7 @@ const corsOptions: CorsOptions = {
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json());
-
+app.use(responseHandler);
 
 // Better Auth middleware
 app.all("/api/auth/{*any}", toNodeHandler(auth));
@@ -41,7 +42,7 @@ app.get("/", (req, res) => {
   console.log("Response sent");
 });
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
