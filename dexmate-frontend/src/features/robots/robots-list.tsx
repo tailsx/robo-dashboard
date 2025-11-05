@@ -1,24 +1,5 @@
-import { useEffect, useState } from "react";
-import { appClient } from "@/lib/app";
-import type { RobotDetail } from "@/lib/app";
 import { Link } from "react-router";
-
-function useRobots() {
-  const [robots, setRobots] = useState<RobotDetail[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchRobots() {
-      const res = await appClient.getRobots();
-      setRobots(res);
-    }
-    setIsLoading(false);
-
-    fetchRobots();
-  }, []);
-
-  return { robots, isLoading };
-}
+import { useRobots } from "./hooks/use-robots";
 
 function RobotsList() {
   const { robots, isLoading } = useRobots();

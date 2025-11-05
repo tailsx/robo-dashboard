@@ -29,6 +29,20 @@
       "when": 1762324098292,
       "tag": "0003_unknown_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1762329144429,
+      "tag": "0004_wealthy_sentinels",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1762329287095,
+      "tag": "0005_fair_mephistopheles",
+      "breakpoints": true
     }
   ]
 }

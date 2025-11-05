@@ -1,14 +1,15 @@
 import { z } from "zod";
-import { RobotsTable } from "#db/schema.js";
+import { RobotsTable, userGroups } from "#db/schema.js";
 import { db } from "#db/database.js";
 import type { Database } from "#db/database.js";
 import { createRobotSchema, robotSchema, robotSettings, RobotSettingsTable } from "#db/schemas/app-schemas.js";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray, or } from "drizzle-orm";
 import { NotFoundError } from "#utils/errors.js";
 
 type CreateRobotSchema = z.infer<typeof createRobotSchema>;
 type RobotSchema = z.infer<typeof robotSchema>;
 type RobotSettings = z.infer<typeof robotSettings>;
+type UserGroups = z.infer<typeof userGroups>;
 
 class RobotService {
   private db: Database;
@@ -16,8 +17,17 @@ class RobotService {
     this.db = db;
   }
 
-  async getAllRobots(ownerId: string): Promise<RobotSchema[]> {
-    return this.db.select().from(RobotsTable).where(eq(RobotsTable.ownerId, ownerId));
+  async getAllRobots(ownerId: string, group?: UserGroups[]): Promise<RobotSchema[]> {
+    const conditions = [eq(RobotsTable.ownerId, ownerId)];
+    if (group && group.length > 0) {
+      const groupIds = group.map((g) => g.id);
+      conditions.push(inArray(RobotsTable.groupId, groupIds));
+    }
+
+    return this.db
+      .select()
+      .from(RobotsTable)
+      .where(or(...conditions));
   }
 
   async getRobotById(robotId: RobotSchema["id"]): Promise<RobotSchema | undefined> {

@@ -21,7 +21,7 @@ export type RobotDetail = {
   serial_number: string;
   name: string;
   ownerId: string;
-  ownerType: "user" | "group";
+  groupId: string | null | undefined;
 };
 
 type UserRobotSetting = {
@@ -56,8 +56,16 @@ class AppClient {
     return res;
   }
 
-  async getUserRobotSetting(robotId: string): Promise<UserRobotSetting> {
+  async assignRobotToGroup(robotId: string, groupId: string): Promise<void> {
+    const res = await this.fetcher.post(`/groups/${groupId}/robots`, { robotId });
+  }
+
+  async getUserRobotSetting(robotId: string): Promise<UserRobotSetting | null> {
     const res = await this.fetcher.get<UserRobotSettingResponse>(`/robots/${robotId}/settings/user`);
+
+    if (!res) {
+      return null;
+    }
 
     return {
       json: JSON.parse(res.settings),

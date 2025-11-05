@@ -5,7 +5,6 @@ import * as schema from "./schema.js";
 const connectionInfo = {
   connectionString: process.env.DATABASE_URL,
 };
-console.log(connectionInfo)
 const pool = new Pool(connectionInfo);
 const db = drizzle({ client: pool, schema });
 

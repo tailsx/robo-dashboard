@@ -3,6 +3,7 @@ import { RobotService } from "./robot-service.js";
 import { DatabaseError, NotFoundError } from "#utils/errors.js";
 import { asyncHandler } from "#middleware/async-handler.js";
 import { requireAuth } from "#middleware/auth-middleware.js";
+import { appendGroups } from "#middleware/groups-middleware.js";
 
 const router = Router();
 const robotService = new RobotService();
@@ -10,11 +11,23 @@ const robotService = new RobotService();
 router.get(
   "/",
   requireAuth,
+  appendGroups,
   asyncHandler(async (req, res) => {
     const user = req.user!;
-    const robots = await robotService.getAllRobots(user.id);
+    const groups = req.userGroups || [];
+    const robots = await robotService.getAllRobots(user.id, groups);
 
     res.success(robots);
+  })
+);
+
+router.post(
+  "/",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const user = req.user!;
+    const newRobot = await robotService.createRobot(user.id, req.body);
+    res.success(newRobot, 201);
   })
 );
 
@@ -57,16 +70,6 @@ router.post(
 
     const setting = await robotService.createUserRobotSetting(user.id, robotId, settings);
     res.success(setting, 201);
-  })
-);
-
-router.post(
-  "/",
-  requireAuth,
-  asyncHandler(async (req, res) => {
-    const user = req.user!;
-    const newRobot = await robotService.createRobot(user.id, req.body);
-    res.success(newRobot, 201);
   })
 );
 
