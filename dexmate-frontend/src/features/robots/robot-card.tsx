@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { Card, CardAction, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import type { RobotDetail } from "@/lib/app";
 import { authClient } from "@/lib/auth-client";
 import { ArrowRightIcon } from "lucide-react";
@@ -15,6 +15,7 @@ export function RobotCard({ robot }: RobotCardProps) {
     <Card className="min-w-[200px]">
       <CardHeader>
         <h3 className="text-lg font-medium">{robot.name}</h3>
+        <CardDescription>{robot.serial_number}</CardDescription>
       </CardHeader>
       <CardContent>
         <div>
