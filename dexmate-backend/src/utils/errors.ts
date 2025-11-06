@@ -35,3 +35,9 @@ export class DatabaseError extends AppError {
     super(message, 500, "DATABASE_ERROR", { cause });
   }
 }
+
+export class InvalidAction extends AppError {
+  constructor(message: string = "Action not allowed"){
+    super(message, 400, "INVALID_ACTION")
+  }
+}

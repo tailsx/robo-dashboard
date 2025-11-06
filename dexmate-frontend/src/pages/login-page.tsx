@@ -2,7 +2,7 @@ import { Login } from "@/features/login/login";
 
 function LoginPage() {
   return (
-    <div>
+    <div className="min-w-screen flex justify-center items-center">
       <Login />
     </div>
   );

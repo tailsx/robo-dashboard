@@ -11,7 +11,10 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 
 const createRobotFormSchema = z.object({
-  serialNumber: z.string(),
+  serialNumber: z
+    .string()
+    .refine((s) => !s.includes(" "), "Serial number cannot contain spaces")
+    .min(1, "Serial number is required"),
   name: z.string().min(1),
 });
 type CreateRobotFormSchema = z.infer<typeof createRobotFormSchema>;
@@ -82,9 +85,6 @@ function CreateRobotForm() {
         <div>
           <Button type="submit">
             <LoadingSwapper isLoading={isSubmitting}>Create Robot</LoadingSwapper>
-          </Button>
-          <Button type="button" variant="secondary">
-            Cancel
           </Button>
         </div>
       </form>

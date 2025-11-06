@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { LoadingSwapper } from "@/components/loading-swapper";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const createGroupFormSchema = z.object({
   name: z.string().min(1),
@@ -20,6 +21,7 @@ function CreateGroupsForm() {
       name: "",
     },
   });
+  const navigate = useNavigate();
 
   async function handleSubmit(data: CreateGroupFormSchema) {
     console.log("Sign Up Data:", data);
@@ -34,6 +36,7 @@ function CreateGroupsForm() {
         },
         onSuccess: (data) => {
           console.log("Organization created:", data);
+          navigate("/groups/" + data.data.id);
         },
       }
     );
@@ -59,10 +62,7 @@ function CreateGroupsForm() {
         />
         <div>
           <Button type="submit">
-            <LoadingSwapper isLoading={isSubmitting}>Create Robot</LoadingSwapper>
-          </Button>
-          <Button type="button" variant="secondary">
-            Cancel
+            <LoadingSwapper isLoading={isSubmitting}>Create Group</LoadingSwapper>
           </Button>
         </div>
       </form>

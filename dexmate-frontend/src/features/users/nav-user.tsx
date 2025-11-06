@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "../login/hooks/use-auth";
 
 function NavUser({
   user,
@@ -20,11 +21,13 @@ function NavUser({
     email: string;
   };
 }) {
+  const { logOut } = useAuth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button className="relative w-full justify-start py-8! bg-white! text-black rounded-full px-2 py-1">
           <NavAvatar name={user.name} />
+          <span>{user.name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg" side="bottom" align="end" sideOffset={4}>
@@ -38,29 +41,7 @@ function NavUser({
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Sparkles />
-            Upgrade to Pro
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <BadgeCheck />
-            Account
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard />
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Bell />
-            Notifications
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={logOut}>
           <LogOut />
           Log out
         </DropdownMenuItem>
@@ -78,7 +59,7 @@ function NavAvatar({ name }: NavAvatarProps) {
     .map((n) => n[0])
     .join("")
     .toUpperCase();
-  return <div className="w-8 h-8 rounded">{initials}</div>;
+  return <div className="w-8 h-8 rounded-full flex justify-center items-center bg-red-500">{initials}</div>;
 }
 
 export { NavUser };

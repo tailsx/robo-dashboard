@@ -24,12 +24,25 @@ export type RobotDetail = {
   groupId: string | null | undefined;
 };
 
+export type GroupMember = User & {
+  role: string;
+};
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 type UserRobotSetting = {
   json: Record<string, string>;
 };
 type UserRobotSettingResponse = {
   settings: string;
 };
+
+export type GroupDetailFull = {};
 
 class AppClient {
   private fetcher: Fetcher;
@@ -38,6 +51,7 @@ class AppClient {
     this.fetcher = new Fetcher(config.baseUrl);
   }
 
+  /** Robots  */
   async createRobot(data: CreateRobotData): Promise<CreateRobotResponse> {
     const res = await this.fetcher.post<CreateRobotResponse>("/robots", data);
     console.log("Created robot with ID:", res.id);
@@ -45,8 +59,18 @@ class AppClient {
     return res;
   }
 
-  async getRobots() {
-    const res = await this.fetcher.get<RobotDetail[]>("/robots");
+  async deleteRobot(robotId: string): Promise<void> {
+    const res = await this.fetcher.delete<void>(`/robots/${robotId}`);
+    console.log("Deleted robot with ID:", robotId);
+    return res;
+  }
+
+  async getRobots(limit: number = 100) {
+    const res = await this.fetcher.get<RobotDetail[]>(`/robots?limit=${limit}`);
+
+    if (limit) {
+      return res.slice(0, limit);
+    }
     return res;
   }
 
@@ -73,8 +97,38 @@ class AppClient {
   }
 
   async createUserRobotSetting(robotId: string, json: Record<string, string>): Promise<void> {
-    const res = this.fetcher.post<void>(`/robots/${robotId}/settings/user`, json);
+    const res = await this.fetcher.post<void>(`/robots/${robotId}/settings/user`, json);
 
+    return res;
+  }
+
+  // Groups
+  async getGroupDetail(groupId: string): Promise<GroupDetailFull> {
+    const res = await this.fetcher.get<GroupDetailFull>(`/groups/${groupId}`);
+
+    return res;
+  }
+
+  async getGroupsWithRole(): Promise<GroupDetailFull[]> {
+    const res = await this.fetcher.get<GroupDetailFull[]>(`/groups`);
+
+    return res;
+  }
+
+  async getGroupMembers(groupId: string) {
+    const res = await this.fetcher.get(`/groups/${groupId}/users`);
+    return res;
+  }
+
+  async addUserToGroup(email: string, groupId: string): Promise<GroupMember> {
+    const res = await this.fetcher.post<GroupMember>(`/groups/${groupId}/users`, { email });
+
+    return res;
+  }
+
+  async removeUserFromGroup(userId: string, groupId: string) {
+    const res = await this.fetcher.delete(`/groups/${groupId}/users/${userId}`);
+    console.log(res);
     return res;
   }
 }

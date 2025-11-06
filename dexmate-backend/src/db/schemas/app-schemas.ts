@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
-import { integer, pgEnum, pgTable, text, unique, uuid, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, text, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { organization, user } from "./auth-schema";
+import { member, organization, user } from "./auth-schema";
 
 export const ownerRoleEnum = pgEnum("owner_role", ["group", "user"]);
 
@@ -16,6 +16,7 @@ export const RobotsTable = pgTable(
       .references(() => user.id, { onDelete: "cascade" })
       .notNull(),
     groupId: text("group_id").references(() => organization.id, { onDelete: "set null" }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
   },
   (table) => [unique().on(table.serial_number)]
 );
@@ -37,6 +38,16 @@ export const robotSettingsRelations = relations(RobotSettingsTable, ({ one }) =>
   robot: one(RobotsTable, {
     fields: [RobotSettingsTable.robotId],
     references: [RobotsTable.id],
+  }),
+}));
+export const memberRelations = relations(member, ({ one }) => ({
+  user: one(user, {
+    fields: [member.userId],
+    references: [user.id],
+  }),
+  group: one(organization, {
+    fields: [member.organizationId],
+    references: [organization.id],
   }),
 }));
 export const robotSettings = createSelectSchema(RobotSettingsTable);

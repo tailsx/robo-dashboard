@@ -1,32 +1,14 @@
-import { appClient } from "@/lib/app";
-import { useEffect, useState } from "react";
+import { useRobotDetail } from "../providers/robot-details-provider";
+import { LoadingSwapper } from "@/components/loading-swapper";
 
-function useUserSettings(robotId: string) {
-  const [setting, setSetting] = useState<Awaited<ReturnType<typeof appClient.getUserRobotSetting>> | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await appClient.getUserRobotSetting(robotId);
-      setSetting(res);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
+function UserSettings() {
+  const { settings, isLoading } = useRobotDetail();
 
-  return { setting, isLoading };
-}
-
-type UserSettingsProps = {
-  robotId: string;
-};
-function UserSettings({ robotId }: UserSettingsProps) {
-  const { setting, isLoading } = useUserSettings(robotId);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return <div>{JSON.stringify(setting)}</div>;
+  return (
+    <LoadingSwapper isLoading={isLoading}>
+      <pre>{JSON.stringify(settings?.json, null, 2)}</pre>
+    </LoadingSwapper>
+  );
 }
 
 export { UserSettings };

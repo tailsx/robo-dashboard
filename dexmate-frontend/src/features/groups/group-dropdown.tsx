@@ -1,17 +1,21 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGroups } from "./hooks/use-groups";
 
-export function GroupDropdown() {
+type GroupDropdownProps = {
+  defaultValue?: string | null;
+};
+
+export function GroupDropdown({ defaultValue }: GroupDropdownProps) {
   const { groups } = useGroups();
 
   return (
-    <Select>
+    <Select defaultValue={defaultValue || undefined}>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="Select a group" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
+          <SelectLabel>Groups</SelectLabel>
           {groups?.map((group) => (
             <SelectItem key={group.id} value={group.id}>
               {group.name}
