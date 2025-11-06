@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { integer, pgEnum, pgTable, text, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { member, organization, user } from "./auth-schema";
+import { member, organization, user } from "./auth-schema.js";
 
 export const ownerRoleEnum = pgEnum("owner_role", ["group", "user"]);
 
