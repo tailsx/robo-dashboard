@@ -34,12 +34,17 @@ function GroupMemberProvider({ groupId, children }: GroupMemberProviderProps) {
   }, []);
 
   const addMember = async (email: string) => {
-    console.log("Adding member:", email, groupId);
-    const member = await appClient.addUserToGroup(email, groupId);
-    console.log(members);
-    console.log("Added member:", member);
-    setMembers((prevMembers) => [...prevMembers, member]);
-    toast.success("Member added successfully");
+    try {
+      console.log("Adding member:", email, groupId);
+      const member = await appClient.addUserToGroup(email, groupId);
+      console.log(members);
+      console.log("Added member:", member);
+      setMembers((prevMembers) => [...prevMembers, member]);
+      toast.success("Member added successfully");
+
+    } catch (error) {
+      toast.error("Failed to add member");
+    }
   };
 
   const deleteMember = async (memberId: string) => {

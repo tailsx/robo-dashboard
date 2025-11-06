@@ -9,7 +9,7 @@ export function useGroupsRoles() {
     const fetchGroups = async () => {
       try {
         const response = await appClient.getGroupsWithRole();
-        console.log(response);
+
         setGroups(response);
       } catch (error) {
         console.error("Error fetching groups:", error);

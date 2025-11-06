@@ -6,6 +6,7 @@ import { RobotDetailProvider, useRobotDetail } from "@/features/providers/robot-
 import { RobotsDetail } from "@/features/robots/robot-detail";
 import { UserSettings } from "@/features/robots/user-settings";
 import { UserSettingDialog } from "@/features/robots/user-settings-dialog";
+import { authClient } from "@/lib/auth-client";
 import { useParams } from "react-router";
 
 function RobotsDetailPage() {
@@ -27,6 +28,14 @@ function RobotsDetailPage() {
       </RobotsDetailExist>
     </RobotDetailProvider>
   );
+}
+
+function AllowGroupAssignment() {
+  const { robot } = useRobotDetail();
+  const { data: session } = authClient.useSession();
+
+  if (session?.user.id !== robot?.ownerId) {
+  }
 }
 
 function RobotsDetailExist({ children }: { children: React.ReactNode }) {

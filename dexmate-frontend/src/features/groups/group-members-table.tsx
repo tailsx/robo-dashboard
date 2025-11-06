@@ -2,6 +2,8 @@ import { Table, TableBody, TableCell, TableHeader, TableRow, TableHead } from "@
 import { Button } from "@/components/ui/button";
 import { RoleDropdown } from "./role-dropdown";
 import { useGroupMembers } from "./providers/group-member-provider";
+import { TrashIcon } from "lucide-react";
+import { RoleGuard } from "./role-guard";
 
 type GroupMembersTableProps = {
   data: any[];
@@ -12,8 +14,9 @@ function GroupMembersTable({ data }: GroupMembersTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead className="w-[100px]">Role</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -22,10 +25,16 @@ function GroupMembersTable({ data }: GroupMembersTableProps) {
             <TableRow key={id} data-row-id={id}>
               <TableCell className="font-medium">{name}</TableCell>
               <TableCell className="font-medium">
-                <RoleDropdown defaultValue={role} />
+                <RoleGuard permission={["manage_members"]} fallback={<span className="capitalize">{role}</span>}>
+                  <RoleDropdown defaultValue={role} />
+                </RoleGuard>
               </TableCell>
               <TableCell className="text-right">
-                <Button data-button-action="remove">Remove</Button>
+                <RoleGuard permission={["delete"]}>
+                  <Button variant="ghost" data-button-action="remove">
+                    <TrashIcon />
+                  </Button>
+                </RoleGuard>
               </TableCell>
             </TableRow>
           ))}
@@ -36,8 +45,9 @@ function GroupMembersTable({ data }: GroupMembersTableProps) {
 
 type GroupTableFullProps = {};
 export function GroupTableFull({}: GroupTableFullProps) {
-  const { isLoading, members, deleteMember } = useGroupMembers();
+  const { isLoading, members, deleteMember, groupRoles } = useGroupMembers();
 
+  console.log("Group roles in table:", groupRoles);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -48,7 +58,6 @@ export function GroupTableFull({}: GroupTableFullProps) {
     const action = target.getAttribute("data-button-action");
 
     if (robotRow && action === "remove") {
-      console.log("few");
       const rowId = robotRow.getAttribute("data-row-id");
 
       if (rowId) {
