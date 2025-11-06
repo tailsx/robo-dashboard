@@ -18,6 +18,7 @@ const groupSchema = createSelectSchema(organization);
 type GroupInfo = z.infer<typeof groupSchema>;
 
 type GroupDetailFull = GroupInfo;
+type GroupMember = z.infer<typeof user> & { role: string };
 
 class GroupService {
   private db: Database;
@@ -38,14 +39,18 @@ class GroupService {
   }
 
   /** Group Management */
-  async getGroupMembers(groupId: string): Promise<any[]> {
+  async getGroupMembers(groupId: string): Promise<GroupMember[]> {
     const members = await this.db.query.member.findMany({
       where: eq(member.organizationId, groupId),
       with: {
         user: true,
       },
     });
-    return members.map((member) => member.user);
+
+    return members.map((member) => ({
+      ...member.user,
+      role: member.role,
+    }));
   }
 
   async addUserToGroup(groupId: string, data: Pick<CreateMemberSchema, "userId" | "role"> & { email: string }): Promise<void> {
@@ -71,14 +76,19 @@ class GroupService {
   }
 
   async removeUserFromGroup(groupId: string, userId: string): Promise<void> {
-    const result = await auth.api.removeMember({
-      body: {
-        memberIdOrEmail: userId,
-        organizationId: groupId,
-      },
-    });
+    console.log("Removing user from group", groupId, userId);
+    try {
+      const result = await auth.api.removeMember({
+        body: {
+          memberIdOrEmail: userId,
+          organizationId: groupId,
+        },
+      });
 
-    console.log(result);
+      console.log(result);
+    } catch (error) {
+      console.error("Error removing member:", error);
+    }
   }
 
   async getRobots(groupId: string): Promise<RobotDetail[]> {
