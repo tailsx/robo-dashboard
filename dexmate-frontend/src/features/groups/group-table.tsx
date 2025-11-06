@@ -20,7 +20,7 @@ function GroupTable({ data }: GroupTableProps) {
       </TableHeader>
       <TableBody>
         {data &&
-          data.map(({ id, name , role}) => (
+          data.map(({ id, name, role }) => (
             <TableRow key={id}>
               <TableCell className="font-medium">{name}</TableCell>
               <TableCell className="font-medium">{role}</TableCell>

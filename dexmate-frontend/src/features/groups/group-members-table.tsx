@@ -4,7 +4,7 @@ import { RoleDropdown } from "./role-dropdown";
 import { useGroupMembers } from "./providers/group-member-provider";
 
 type GroupMembersTableProps = {
-  data: any;
+  data: any[];
   onRemoveMember?: (memberId: string) => void;
 };
 function GroupMembersTable({ data }: GroupMembersTableProps) {

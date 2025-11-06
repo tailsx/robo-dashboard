@@ -38,7 +38,7 @@ export function GroupAddMemberForm({}: GroupAddMemberFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -49,9 +49,6 @@ export function GroupAddMemberForm({}: GroupAddMemberFormProps) {
         <div>
           <Button type="submit">
             <LoadingSwapper isLoading={isSubmitting}>Create Robot</LoadingSwapper>
-          </Button>
-          <Button type="button" variant="secondary">
-            Cancel
           </Button>
         </div>
       </form>

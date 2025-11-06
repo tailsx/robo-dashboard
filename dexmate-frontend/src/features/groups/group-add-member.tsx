@@ -7,9 +7,7 @@ type GroupAddMemberProps = {
 export function GroupAddMember({ groupId }: GroupAddMemberProps) {
   return (
     <div>
-      Group Add Member Component
-      <p>Group ID: {groupId}</p>
-      <GroupAddMemberForm groupId={groupId} />
+      <GroupAddMemberForm />
     </div>
   );
 }

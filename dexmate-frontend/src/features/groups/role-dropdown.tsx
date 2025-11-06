@@ -15,7 +15,7 @@ export function RoleDropdown({ defaultValue }: RoleDropdownProps) {
   }
   return (
     <Select defaultValue={defaultValue}>
-      <SelectTrigger className="w-[150px] text-white">
+      <SelectTrigger className="w-[150px]">
         <SelectValue placeholder="Select role" />
       </SelectTrigger>
       <SelectContent>
