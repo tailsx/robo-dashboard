@@ -83,21 +83,8 @@ class GroupService {
 
   async removeUserFromGroup(groupId: string, userId: string): Promise<void> {
     console.log("Removing user from group", groupId, userId);
-    /*
-    const result = await auth.api.removeMember({
-      body: {
-        memberIdOrEmail: userId,
-        organizationId: groupId,
-      },
-    });
-    */
-    try {
-      const result = await this.db.delete(member).where(and(eq(member.organizationId, groupId), eq(member.userId, userId)));
-      console.log(result);
-    } catch (e) {
-      console.log(e);
-      throw e
-    }
+    const result = await this.db.delete(member).where(and(eq(member.organizationId, groupId), eq(member.userId, userId)));
+    console.log(result);
   }
 
   async getRobots(groupId: string): Promise<RobotDetail[]> {

@@ -35,6 +35,7 @@ export const routes: RouteObject[] = [
           {
             path: "robots/:robotId",
             element: <RobotsDetailPage />,
+            errorElement: <NotFoundPage />,
           },
           {
             path: "groups",

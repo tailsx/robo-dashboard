@@ -1,0 +1,1 @@
+ALTER TABLE "robots" ADD COLUMN "createdAt" timestamp DEFAULT now() NOT NULL;

@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgEnum, pgTable, text, unique, uuid, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, text, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { member, organization, user } from "./auth-schema";
 
@@ -16,6 +16,7 @@ export const RobotsTable = pgTable(
       .references(() => user.id, { onDelete: "cascade" })
       .notNull(),
     groupId: text("group_id").references(() => organization.id, { onDelete: "set null" }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
   },
   (table) => [unique().on(table.serial_number)]
 );

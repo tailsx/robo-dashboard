@@ -3,7 +3,7 @@ import { RobotsTable, userGroups } from "#db/schema.js";
 import { db } from "#db/database.js";
 import type { Database } from "#db/database.js";
 import { createRobotSchema, robotSchema, robotSettings, RobotSettingsTable } from "#db/schemas/app-schemas.js";
-import { and, eq, inArray, or } from "drizzle-orm";
+import { and, asc, eq, inArray, or, desc } from "drizzle-orm";
 import { NotFoundError } from "#utils/errors.js";
 
 type CreateRobotSchema = z.infer<typeof createRobotSchema>;
@@ -11,23 +11,44 @@ type RobotSchema = z.infer<typeof robotSchema>;
 type RobotSettings = z.infer<typeof robotSettings>;
 type UserGroups = z.infer<typeof userGroups>;
 
+type QueryFilters = {
+  limit?: number;
+  offset?: number;
+  orderBy?: "asc" | "desc";
+};
+
 class RobotService {
   private db: Database;
   constructor() {
     this.db = db;
   }
 
-  async getAllRobots(ownerId: string, group?: UserGroups[]): Promise<RobotSchema[]> {
+  async getAllRobots(ownerId: string, group?: UserGroups[], filter?: QueryFilters): Promise<RobotSchema[]> {
     const conditions = [eq(RobotsTable.ownerId, ownerId)];
     if (group && group.length > 0) {
       const groupIds = group.map((g) => g.id);
       conditions.push(inArray(RobotsTable.groupId, groupIds));
     }
 
-    return this.db
+    const query = this.db
       .select()
       .from(RobotsTable)
       .where(or(...conditions));
+
+    if (filter?.orderBy) {
+      query.orderBy(filter.orderBy === "asc" ? asc(RobotsTable.createdAt) : desc(RobotsTable.createdAt));
+    }
+    if (filter?.limit) {
+      console.log("Applying limit:", filter.limit);
+      query.limit(filter.limit);
+    }
+    if (filter?.offset) {
+      console.log("Applying offset:", filter.offset);
+      query.offset(filter.offset);
+    }
+
+    const result = await query;
+    return result;
   }
 
   async getRobotById(robotId: RobotSchema["id"]): Promise<RobotSchema | undefined> {

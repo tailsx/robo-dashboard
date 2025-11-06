@@ -9,7 +9,6 @@ function AppLayout() {
         <NavSidebar />
       </aside>
       <main className="p-4 overflow-auto">
-        <h1>Welcome to the App!</h1>
         <Outlet />
         <Toaster />
       </main>

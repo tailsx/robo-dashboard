@@ -26,7 +26,7 @@ export type RobotDetail = {
 
 export type GroupMember = User & {
   role: string;
-}
+};
 
 type User = {
   id: string;
@@ -65,8 +65,12 @@ class AppClient {
     return res;
   }
 
-  async getRobots() {
-    const res = await this.fetcher.get<RobotDetail[]>("/robots");
+  async getRobots(limit: number = 100) {
+    const res = await this.fetcher.get<RobotDetail[]>(`/robots?limit=${limit}`);
+
+    if (limit) {
+      return res.slice(0, limit);
+    }
     return res;
   }
 

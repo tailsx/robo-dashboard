@@ -7,11 +7,11 @@ export function GroupDropdown() {
   return (
     <Select>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="Select a group" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
+          <SelectLabel>Groups</SelectLabel>
           {groups?.map((group) => (
             <SelectItem key={group.id} value={group.id}>
               {group.name}

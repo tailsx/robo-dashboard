@@ -13,9 +13,10 @@ router.get(
   requireAuth,
   appendGroups,
   asyncHandler(async (req, res) => {
+    console.log(req.query)
     const user = req.user!;
     const groups = req.userGroups || [];
-    const robots = await robotService.getAllRobots(user.id, groups);
+    const robots = await robotService.getAllRobots(user.id, groups, req.query);
 
     res.success(robots);
   })
@@ -34,13 +35,15 @@ router.post(
 router.get(
   "/:robotId",
   requireAuth,
+  appendGroups,
   asyncHandler(async (req, res) => {
     const user = req.user!;
+    const groups = req.userGroups || [];
     const robotId = req.params.robotId;
 
     const robot = await robotService.getRobotById(robotId);
 
-    if (robot && robot.ownerId !== user.id) {
+    if (robot && robot.ownerId !== user.id && !groups.find((g) => g.id === robot.groupId)) {
       throw new NotFoundError("Not found " + robotId);
     }
 
@@ -58,7 +61,6 @@ router.delete(
     await robotService.deleteRobot(user.id, robotId);
 
     res.success(null, 204);
-
   })
 );
 

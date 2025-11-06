@@ -1,13 +1,11 @@
-import { RobotsProvider } from "@/features/providers/data-providers";
+import { RobotsProvider } from "@/features/providers/robots-provider";
 import { CreateRobotForm } from "@/features/robots/create-robot-form";
 import { RobotTable } from "@/features/robots/robot-table";
-import { RobotsList } from "@/features/robots/robots-list";
 
 function RobotsPage() {
   return (
     <RobotsProvider>
       <div>
-        <RobotsList />
         <CreateRobotForm />
         <RobotTable />
       </div>

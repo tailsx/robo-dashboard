@@ -12,16 +12,19 @@ const RobotsContext = createContext<RobotsContextValue | undefined>(undefined);
 
 interface RobotsProviderProps {
   children: ReactNode;
+  config?: {
+    limit?: number;
+  };
 }
 
-function RobotsProvider({ children }: RobotsProviderProps) {
+function RobotsProvider({ config, children }: RobotsProviderProps) {
   const [robots, setRobots] = useState<RobotDetail[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchRobots() {
       try {
-        const res = await appClient.getRobots();
+        const res = await appClient.getRobots(config?.limit);
         setRobots(res);
       } finally {
         setIsLoading(false);

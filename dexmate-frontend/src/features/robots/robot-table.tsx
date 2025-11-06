@@ -1,7 +1,8 @@
 import { Table, TableBody, TableCaption, TableCell, TableHeader, TableRow, TableHead } from "@/components/ui/table";
 import type { RobotDetail } from "@/lib/app";
 import { Button } from "@/components/ui/button";
-import { useRobots } from "@/features/providers/data-providers";
+import { useRobots } from "@/features/providers/robots-provider";
+import { Link } from "react-router";
 
 type RobotTableProps = {
   data: RobotDetail[];
@@ -23,7 +24,9 @@ function RobotTable({ data }: RobotTableProps) {
               <TableCell className="font-medium">{name}</TableCell>
               <TableCell>{groupId}</TableCell>
               <TableCell className="text-right">
-                <Button>View</Button>
+                <Link to={`/robots/${id}`}>
+                  <Button>View</Button>
+                </Link>
                 <Button data-robot-action="delete">Delete</Button>
               </TableCell>
             </TableRow>

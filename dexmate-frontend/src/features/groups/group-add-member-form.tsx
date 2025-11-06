@@ -5,11 +5,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingSwapper } from "@/components/loading-swapper";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
-import { appClient } from "@/lib/app";
-import { use } from "react";
-import { useGroupMembership } from "./hooks/use-group-membership";
 import { useGroupMembers } from "./providers/group-member-provider";
 
 const groupAddMemberFormSchema = z.object({
