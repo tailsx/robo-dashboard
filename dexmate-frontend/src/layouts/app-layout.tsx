@@ -1,4 +1,5 @@
 import { NavSidebar } from "@/components/nav-sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { Outlet } from "react-router";
 
 function AppLayout() {
@@ -10,6 +11,7 @@ function AppLayout() {
       <main className="p-4 overflow-auto">
         <h1>Welcome to the App!</h1>
         <Outlet />
+        <Toaster />
       </main>
     </div>
   );

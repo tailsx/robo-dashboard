@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useRobots } from "./hooks/use-robots";
+import { useRobots } from "../providers/data-providers";
 
 function RobotsList() {
   const { robots, isLoading } = useRobots();

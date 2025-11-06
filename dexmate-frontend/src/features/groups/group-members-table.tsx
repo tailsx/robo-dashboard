@@ -1,11 +1,7 @@
 import { Table, TableBody, TableCell, TableHeader, TableRow, TableHead } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
-import { useEffect, useState } from "react";
-import { appClient } from "@/lib/app";
 import { RoleDropdown } from "./role-dropdown";
-import { useGroupMembership } from "./hooks/use-group-membership";
-import { toast } from "sonner";
+import { useGroupMembers } from "./providers/group-member-provider";
 
 type GroupMembersTableProps = {
   data: any;
@@ -23,13 +19,13 @@ function GroupMembersTable({ data }: GroupMembersTableProps) {
       <TableBody>
         {data &&
           data.map(({ id, name, role }) => (
-            <TableRow key={id}>
+            <TableRow key={id} data-row-id={id}>
               <TableCell className="font-medium">{name}</TableCell>
               <TableCell className="font-medium">
                 <RoleDropdown defaultValue={role} />
               </TableCell>
               <TableCell className="text-right">
-                <Button data-remove-member={id}>Remove</Button>
+                <Button data-button-action="remove">Remove</Button>
               </TableCell>
             </TableRow>
           ))}
@@ -38,65 +34,32 @@ function GroupMembersTable({ data }: GroupMembersTableProps) {
   );
 }
 
-function useGroupMembers(groupId: string) {
-  const [members, setMembers] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        const data = await appClient.getGroupMembers(groupId);
-        console.log(data);
-        setMembers(data);
-      } catch (error) {
-        console.error("Error fetching group members:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMembers();
-  }, []);
-
-  const removeMember = (memberId: string) => {
-    setMembers((prevMembers) => prevMembers.filter((member) => member.id !== memberId));
-  };
-
-  return { members, isLoading, removeMember };
-}
-
-type GroupTableFullProps = {
-  groupId: string;
-};
-export function GroupTableFull({ groupId }: GroupTableFullProps) {
-  const { isLoading, members, removeMember: removeGroupMember } = useGroupMembers(groupId);
-  const { removeMember } = useGroupMembership(groupId);
+type GroupTableFullProps = {};
+export function GroupTableFull({}: GroupTableFullProps) {
+  const { isLoading, members, deleteMember } = useGroupMembers();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const handleRemoveMember = async (memberId: string) => {
-    await removeMember(memberId);
-    await removeGroupMember(memberId);
-  };
-  const handleClick = async (event: React.MouseEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement;
-    const button = target.closest("button[data-remove-member]");
-    if (button) {
-      console.log("Remove member clicked");
-      const memberId = button.getAttribute("data-remove-member");
-      if (memberId) {
-        await removeMember(memberId);
+  const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    const robotRow = target.closest("tr[data-row-id]");
+    const action = target.getAttribute("data-button-action");
 
-        toast.success("Member removed successfully");
+    if (robotRow && action === "remove") {
+      console.log("few");
+      const rowId = robotRow.getAttribute("data-row-id");
+
+      if (rowId) {
+        await deleteMember(rowId);
       }
     }
   };
 
   return (
     <div onClick={handleClick}>
-      <GroupMembersTable data={members} onRemoveMember={handleRemoveMember} />
+      <GroupMembersTable data={members} />
     </div>
   );
 }

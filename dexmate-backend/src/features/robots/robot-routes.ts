@@ -48,6 +48,20 @@ router.get(
   })
 );
 
+router.delete(
+  "/:robotId",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const user = req.user!;
+    const robotId = req.params.robotId;
+
+    await robotService.deleteRobot(user.id, robotId);
+
+    res.success(null, 204);
+
+  })
+);
+
 router.get(
   "/:robotId/settings/user",
   requireAuth,

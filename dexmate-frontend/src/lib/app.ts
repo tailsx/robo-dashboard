@@ -24,6 +24,17 @@ export type RobotDetail = {
   groupId: string | null | undefined;
 };
 
+export type GroupMember = User & {
+  role: string;
+}
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 type UserRobotSetting = {
   json: Record<string, string>;
 };
@@ -40,10 +51,17 @@ class AppClient {
     this.fetcher = new Fetcher(config.baseUrl);
   }
 
+  /** Robots  */
   async createRobot(data: CreateRobotData): Promise<CreateRobotResponse> {
     const res = await this.fetcher.post<CreateRobotResponse>("/robots", data);
     console.log("Created robot with ID:", res.id);
 
+    return res;
+  }
+
+  async deleteRobot(robotId: string): Promise<void> {
+    const res = await this.fetcher.delete<void>(`/robots/${robotId}`);
+    console.log("Deleted robot with ID:", robotId);
     return res;
   }
 
@@ -92,10 +110,9 @@ class AppClient {
     return res;
   }
 
-  async addUserToGroup(email: string, groupId: string) {
-    const res = await this.fetcher.post(`/groups/${groupId}/users`, { email });
+  async addUserToGroup(email: string, groupId: string): Promise<GroupMember> {
+    const res = await this.fetcher.post<GroupMember>(`/groups/${groupId}/users`, { email });
 
-    console.log(res);
     return res;
   }
 

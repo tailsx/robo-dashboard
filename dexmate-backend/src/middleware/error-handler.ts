@@ -3,6 +3,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { AppError } from "#utils/errors.js";
 import { DrizzleError, DrizzleQueryError } from "drizzle-orm/errors";
+import { APIError } from "better-auth";
 
 const PG_ERROR_CODES = {
   UNIQUE_VIOLATION: "23505",
@@ -15,6 +16,17 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
     message: error.message,
     stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
   });
+
+  if (error instanceof APIError) {
+    return res.status(error.statusCode).json({
+      success: false,
+      error: {
+        code: error.statusCode,
+        message: error.message,
+        ...(process.env.NODE_ENV === "development" && { stack: error.stack }),
+      },
+    });
+  }
 
   // Handle known AppError instances
   if (error instanceof AppError) {

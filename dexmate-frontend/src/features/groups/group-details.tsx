@@ -1,11 +1,10 @@
-import { appClient } from "@/lib/app";
+import { appClient, type GroupDetailFull } from "@/lib/app";
 import { useEffect, useState } from "react";
 
 type GroupDetailsProps = {
   groupId: string;
 };
 
-type GroupDetailFull = Awaited<ReturnType<typeof appClient.getGroupDetail>>;
 
 function useGroupDetails(groupId: string) {
   const [data, setData] = useState<GroupDetailFull | null>(null);

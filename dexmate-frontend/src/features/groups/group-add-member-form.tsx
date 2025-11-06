@@ -10,31 +10,27 @@ import { toast } from "sonner";
 import { appClient } from "@/lib/app";
 import { use } from "react";
 import { useGroupMembership } from "./hooks/use-group-membership";
+import { useGroupMembers } from "./providers/group-member-provider";
 
 const groupAddMemberFormSchema = z.object({
   email: z.email(),
 });
 type GroupAddMemberSchema = z.infer<typeof groupAddMemberFormSchema>;
 
-type GroupAddMemberFormProps = {
-  groupId: string;
-};
-export function GroupAddMemberForm({ groupId }: GroupAddMemberFormProps) {
+type GroupAddMemberFormProps = {};
+export function GroupAddMemberForm({}: GroupAddMemberFormProps) {
   const form = useForm<GroupAddMemberSchema>({
     resolver: zodResolver(groupAddMemberFormSchema),
     defaultValues: {
       email: "",
     },
   });
-  const { addMember } = useGroupMembership(groupId);
+  const { addMember } = useGroupMembers();
 
   async function handleSubmit(data: GroupAddMemberSchema) {
     console.log("Sign Up Data:", data);
 
-    const result = await addMember(data.email);
-
-    toast.success("Member added successfully.");
-    console.log("Add member result:", result);
+    await addMember(data.email);
   }
 
   const { isSubmitting } = form.formState;

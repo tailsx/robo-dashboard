@@ -8,6 +8,8 @@ import { NotFoundError } from "#utils/errors.js";
 import { createSelectSchema } from "drizzle-zod";
 import { auth } from "#lib/auth.js";
 
+const userSchema = createSelectSchema(user);
+
 type CreateRobotSchema = z.infer<typeof createRobotSchema>;
 type RobotSchema = z.infer<typeof robotSchema>;
 type RobotSettings = z.infer<typeof robotSettings>;
@@ -19,6 +21,7 @@ type GroupInfo = z.infer<typeof groupSchema>;
 
 type GroupDetailFull = GroupInfo;
 type GroupMember = z.infer<typeof user> & { role: string };
+type User = z.infer<typeof userSchema>;
 
 class GroupService {
   private db: Database;
@@ -53,7 +56,7 @@ class GroupService {
     }));
   }
 
-  async addUserToGroup(groupId: string, data: Pick<CreateMemberSchema, "userId" | "role"> & { email: string }): Promise<void> {
+  async addUserToGroup(groupId: string, data: Pick<CreateMemberSchema, "role"> & { email: string }): Promise<GroupMember> {
     const _user = await this.db.query.user.findFirst({
       where: eq(user.email, data.email),
     });
@@ -72,7 +75,10 @@ class GroupService {
     });
     console.log(result);
 
-    return;
+    return {
+      ..._user,
+      role: data.role || "member",
+    };
   }
 
   async removeUserFromGroup(groupId: string, userId: string): Promise<void> {
@@ -85,14 +91,13 @@ class GroupService {
       },
     });
     */
-   try{
-
-     const result =await this.db.delete(member).where(and(eq(member.organizationId, groupId), eq(member.userId, userId)));
-     console.log(result);
-    } catch(e){
+    try {
+      const result = await this.db.delete(member).where(and(eq(member.organizationId, groupId), eq(member.userId, userId)));
+      console.log(result);
+    } catch (e) {
       console.log(e);
-   }
-
+      throw e
+    }
   }
 
   async getRobots(groupId: string): Promise<RobotDetail[]> {
@@ -106,7 +111,7 @@ class GroupService {
   async addRobotToGroup(robotId: string, groupId: string): Promise<RobotDetail> {
     const robot = await this.db
       .update(RobotsTable)
-      .values({
+      .set({
         groupId: groupId,
       })
       .where(eq(RobotsTable.id, robotId));

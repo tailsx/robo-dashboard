@@ -57,6 +57,10 @@ class RobotService {
     };
   }
 
+  async deleteRobot(ownerId: string, robotId: RobotSchema["id"]): Promise<void> {
+    const result = await this.db.delete(RobotsTable).where(and(eq(RobotsTable.id, robotId), eq(RobotsTable.ownerId, ownerId)));
+  }
+
   async getUserRobotSettings(userId: string, robotId: RobotSchema["id"]): Promise<RobotSettings | undefined> {
     {
       const result = await this.db.query.RobotSettingsTable.findFirst({

@@ -1,8 +1,7 @@
 import { Table, TableBody, TableCaption, TableCell, TableHeader, TableRow, TableHead } from "@/components/ui/table";
 import type { RobotDetail } from "@/lib/app";
-import { use } from "react";
-import { useRobots } from "./hooks/use-robots";
 import { Button } from "@/components/ui/button";
+import { useRobots } from "@/features/providers/data-providers";
 
 type RobotTableProps = {
   data: RobotDetail[];
@@ -20,12 +19,12 @@ function RobotTable({ data }: RobotTableProps) {
       <TableBody>
         {data &&
           data.map(({ id, name, groupId }) => (
-            <TableRow key={id}>
+            <TableRow key={id} data-robot-id={id}>
               <TableCell className="font-medium">{name}</TableCell>
               <TableCell>{groupId}</TableCell>
               <TableCell className="text-right">
                 <Button>View</Button>
-                <Button>Delete</Button>
+                <Button data-robot-action="delete">Delete</Button>
               </TableCell>
             </TableRow>
           ))}
@@ -35,13 +34,30 @@ function RobotTable({ data }: RobotTableProps) {
 }
 
 function RobotTableFull() {
-  const { robots, isLoading } = useRobots();
+  const { robots, isLoading, deleteRobot } = useRobots();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  return <RobotTable data={robots} />;
+  const handleClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    const robotRow = target.closest("tr[data-robot-id]");
+    const action = target.getAttribute("data-robot-action");
+
+    if (robotRow && action === "delete") {
+      const robotId = robotRow.getAttribute("data-robot-id");
+      if (robotId) {
+        await deleteRobot(robotId);
+      }
+    }
+  };
+
+  return (
+    <div onClick={handleClick}>
+      <RobotTable data={robots} />
+    </div>
+  );
 }
 
 export { RobotTableFull as RobotTable };
