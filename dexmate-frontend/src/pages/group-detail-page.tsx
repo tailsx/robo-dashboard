@@ -1,3 +1,4 @@
+import { GroupAddMember } from "@/features/groups/group-add-member";
 import { GroupDetails } from "@/features/groups/group-details";
 import { useParams } from "react-router";
 
@@ -7,6 +8,7 @@ function GroupsDetailPage() {
   return (
     <div>
       <GroupDetails groupId={groupId!} />
+      <GroupAddMember groupId={groupId!} />
     </div>
   );
 }

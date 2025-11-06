@@ -7,13 +7,12 @@ const router = Router();
 const groupService = new GroupService();
 
 router.post(
-  "/groups",
+  "/groups/:groupId/users",
   requireAuth,
   asyncHandler(async (req, res) => {
-    const user = req.user!;
+    const groupId = req.params.groupId;
     const body = req.body;
-    const groups = req.userGroups || [];
-    const result = await groupService.addUserToGroup();
+    const result = await groupService.addUserToGroup(groupId, body);
 
     res.success(result);
   })

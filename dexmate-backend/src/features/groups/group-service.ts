@@ -1,11 +1,12 @@
 import { z } from "zod";
-import { createMemberSchema, member, organization, RobotsTable, userGroups } from "#db/schema.js";
+import { createMemberSchema, member, organization, RobotsTable, user, userGroups } from "#db/schema.js";
 import { db } from "#db/database.js";
 import type { Database } from "#db/database.js";
 import { createRobotSchema, robotSchema, robotSettings, RobotSettingsTable } from "#db/schemas/app-schemas.js";
 import { and, eq, inArray, or } from "drizzle-orm";
 import { NotFoundError } from "#utils/errors.js";
 import { createSelectSchema } from "drizzle-zod";
+import { auth } from "#lib/auth.js";
 
 type CreateRobotSchema = z.infer<typeof createRobotSchema>;
 type RobotSchema = z.infer<typeof robotSchema>;
@@ -16,7 +17,7 @@ type CreateMemberSchema = z.infer<typeof createMemberSchema>;
 const groupSchema = createSelectSchema(organization);
 type GroupInfo = z.infer<typeof groupSchema>;
 
-type GroupDetailFull = GroupInfo
+type GroupDetailFull = GroupInfo;
 
 class GroupService {
   private db: Database;
@@ -36,12 +37,29 @@ class GroupService {
     return group;
   }
 
-  async addUserToGroup(data: CreateMemberSchema): Promise<void> {
-    await this.db.insert(member).values({
-      organizationId: data.organizationId,
-      role: data.role,
-      userId: data.userId,
+  async addUserToGroup(groupId: string, data: Pick<CreateMemberSchema, "userId" | "role"> & { email: string }): Promise<void> {
+    console.log("Adding user to group:", groupId, data);
+    const _user = await this.db.query.user.findFirst({
+      where: eq(user.email, data.email),
     });
+    console.log("Found user:", _user);
+
+    if (!_user) {
+      throw new NotFoundError("User not found with email");
+    }
+    console.log("User ID to add:", _user.id);
+
+    const result = await auth.api.addMember({
+      body: {
+        userId: _user.id,
+        // @ts-expect-error string vs enum issue
+        role: data.role || "member",
+        organizationId: groupId,
+      },
+    });
+    console.log(result);
+
+    return;
   }
 
   async getRobots(groupId: string): Promise<RobotDetail[]> {

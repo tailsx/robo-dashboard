@@ -31,12 +31,7 @@ type UserRobotSettingResponse = {
   settings: string;
 };
 
-
-
-export type GroupDetailFull = {
-
-}
-
+export type GroupDetailFull = {};
 
 class AppClient {
   private fetcher: Fetcher;
@@ -88,8 +83,14 @@ class AppClient {
   async getGroupDetail(groupId: string): Promise<GroupDetailFull> {
     const res = await this.fetcher.get<GroupDetailFull>(`/groups/${groupId}`);
 
+    return res;
+  }
 
-    return res
+  async addUserToGroup(email: string, groupId: string) {
+    const res = await this.fetcher.post(`/groups/${groupId}/users`, { email });
+
+    console.log(res);
+    return res;
   }
 }
 
