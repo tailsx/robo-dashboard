@@ -83,9 +83,6 @@ function CreateRobotForm() {
           <Button type="submit">
             <LoadingSwapper isLoading={isSubmitting}>Create Robot</LoadingSwapper>
           </Button>
-          <Button type="button" variant="secondary">
-            Cancel
-          </Button>
         </div>
       </form>
     </Form>
