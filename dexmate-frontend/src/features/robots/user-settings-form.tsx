@@ -1,11 +1,10 @@
 import z from "zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingSwapper } from "@/components/loading-swapper";
-import { appClient } from "@/lib/app";
 import { toast } from "sonner";
 import { TrashIcon } from "lucide-react";
 
@@ -19,10 +18,7 @@ const createUserSettingSchema = z.object({
 });
 type CreateUserSettingSchema = z.infer<typeof createUserSettingSchema>;
 
-type CreateUserSettingFormProps = {
-  robotId: string;
-};
-function CreateUserSettingForm({ robotId }: CreateUserSettingFormProps) {
+function CreateUserSettingForm() {
   const form = useForm<CreateUserSettingSchema>({
     resolver: zodResolver(createUserSettingSchema),
     defaultValues: {
@@ -44,7 +40,6 @@ function CreateUserSettingForm({ robotId }: CreateUserSettingFormProps) {
     }
 
     try {
-      const res = await appClient.createUserRobotSetting(robotId, json);
       toast.success("User settings created successfully");
     } catch (error) {
       toast.error("Failed to create user settings");

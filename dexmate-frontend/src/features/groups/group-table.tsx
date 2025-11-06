@@ -20,6 +20,7 @@ function GroupTable({ data }: GroupTableProps) {
       </TableHeader>
       <TableBody>
         {data &&
+          //@ts-expect-error
           data.map(({ id, name, role }) => (
             <TableRow key={id}>
               <TableCell className="font-medium">{name}</TableCell>

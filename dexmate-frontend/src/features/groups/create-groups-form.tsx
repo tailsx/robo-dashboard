@@ -25,13 +25,13 @@ function CreateGroupsForm() {
 
   async function handleSubmit(data: CreateGroupFormSchema) {
     console.log("Sign Up Data:", data);
-    const res = await authClient.organization.create(
+    await authClient.organization.create(
       {
         name: data.name,
         slug: data.name.toLowerCase().replace(/\s+/g, "-"),
       },
       {
-        onError: (error) => {
+        onError: () => {
           toast.error("Failed to create group. Please try again.");
         },
         onSuccess: (data) => {

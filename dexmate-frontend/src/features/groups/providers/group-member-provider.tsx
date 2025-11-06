@@ -7,6 +7,7 @@ interface GroupMembersContextValue {
   addMember: (email: string) => Promise<void>;
   deleteMember: (memberId: string) => Promise<void>;
   members: GroupMember[];
+  groupRoles?: any[]
 }
 
 const GroupMemberContext = createContext<GroupMembersContextValue | undefined>(undefined);

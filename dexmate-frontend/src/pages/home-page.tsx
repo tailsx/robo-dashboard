@@ -5,7 +5,6 @@ import { GroupCard } from "@/features/groups/group-card";
 import { useGroups } from "@/features/groups/hooks/use-groups";
 import { RobotsProvider, useRobots } from "@/features/providers/robots-provider";
 import { RobotCard } from "@/features/robots/robot-card";
-import { RobotTable } from "@/features/robots/robot-table";
 import { authClient } from "@/lib/auth-client";
 import type React from "react";
 import { Link } from "react-router";

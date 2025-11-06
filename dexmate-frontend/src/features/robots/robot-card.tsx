@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import type { RobotDetail } from "@/lib/app";
 import { authClient } from "@/lib/auth-client";
-import { ArrowRight, ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import { Link } from "react-router";
 
 type RobotCardProps = {

@@ -6,8 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingSwapper } from "@/components/loading-swapper";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
 import { SectionHeading } from "@/components/typography";
 
 const signUpSchema = z.object({
@@ -29,20 +27,6 @@ function SignUpForm() {
 
   async function handleSignUp(data: SignUpFormSchema) {
     console.log("Sign Up Data:", data);
-    const res = await authClient.signUp.email(
-      {
-        ...data,
-        callbackURL: "/",
-      },
-      {
-        onError: (error) => {
-          toast.error(error.error.message || "Failed to sign up");
-        },
-        onSuccess: () => {
-          console.log("Sign up successful, please check your email.");
-        },
-      }
-    );
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
   }

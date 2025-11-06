@@ -4,7 +4,7 @@ type GroupAddMemberProps = {
   groupId: string;
 };
 
-export function GroupAddMember({ groupId }: GroupAddMemberProps) {
+export function GroupAddMember({  }: GroupAddMemberProps) {
   return (
     <div>
       <GroupAddMemberForm />

@@ -81,7 +81,7 @@ class AppClient {
   }
 
   async assignRobotToGroup(robotId: string, groupId: string): Promise<void> {
-    const res = await this.fetcher.post(`/groups/${groupId}/robots`, { robotId });
+    await this.fetcher.post(`/groups/${groupId}/robots`, { robotId });
   }
 
   async getUserRobotSetting(robotId: string): Promise<UserRobotSetting | null> {
@@ -116,7 +116,7 @@ class AppClient {
   }
 
   async getGroupMembers(groupId: string) {
-    const res = await this.fetcher.get(`/groups/${groupId}/users`);
+    const res = await this.fetcher.get<any>(`/groups/${groupId}/users`);
     return res;
   }
 
