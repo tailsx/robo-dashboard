@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingSwapper } from "@/components/loading-swapper";
 import { SectionHeading } from "@/components/typography";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -24,11 +27,21 @@ function SignUpForm() {
       name: "",
     },
   });
+  const navigate = useNavigate();
 
   async function handleSignUp(data: SignUpFormSchema) {
     console.log("Sign Up Data:", data);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      await authClient.signUp.email({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      });
+      navigate("/");
+    } catch (error) {
+      toast.error("Failed to sign up. Please try again.");
+    }
   }
 
   const { isSubmitting } = form.formState;

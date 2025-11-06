@@ -3,6 +3,7 @@ import type { RobotDetail } from "@/lib/app";
 import { Button } from "@/components/ui/button";
 import { useRobots } from "@/features/providers/robots-provider";
 import { Link } from "react-router";
+import { EyeIcon, TrashIcon } from "lucide-react";
 
 type RobotTableProps = {
   data: RobotDetail[];
@@ -25,9 +26,13 @@ function RobotTable({ data }: RobotTableProps) {
               <TableCell>{groupId}</TableCell>
               <TableCell className="text-right">
                 <Link to={`/robots/${id}`}>
-                  <Button>View</Button>
+                  <Button className="cursor-pointer" variant="ghost">
+                    <EyeIcon />
+                  </Button>
                 </Link>
-                <Button data-robot-action="delete">Delete</Button>
+                <Button className="cursor-pointer" variant="ghost" data-robot-action="delete">
+                  <TrashIcon />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
