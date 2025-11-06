@@ -8,6 +8,8 @@ import { LoadingSwapper } from "@/components/loading-swapper";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { appClient } from "@/lib/app";
+import { use } from "react";
+import { useGroupMembership } from "./hooks/use-group-membership";
 
 const groupAddMemberFormSchema = z.object({
   email: z.email(),
@@ -15,8 +17,8 @@ const groupAddMemberFormSchema = z.object({
 type GroupAddMemberSchema = z.infer<typeof groupAddMemberFormSchema>;
 
 type GroupAddMemberFormProps = {
-    groupId: string;
-}
+  groupId: string;
+};
 export function GroupAddMemberForm({ groupId }: GroupAddMemberFormProps) {
   const form = useForm<GroupAddMemberSchema>({
     resolver: zodResolver(groupAddMemberFormSchema),
@@ -24,11 +26,12 @@ export function GroupAddMemberForm({ groupId }: GroupAddMemberFormProps) {
       email: "",
     },
   });
+  const { addMember } = useGroupMembership(groupId);
 
   async function handleSubmit(data: GroupAddMemberSchema) {
     console.log("Sign Up Data:", data);
 
-    const result = await appClient.addUserToGroup(data.email, groupId);
+    const result = await addMember(data.email);
 
     toast.success("Member added successfully.");
     console.log("Add member result:", result);

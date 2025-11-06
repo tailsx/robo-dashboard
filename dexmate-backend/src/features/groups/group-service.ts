@@ -37,17 +37,25 @@ class GroupService {
     return group;
   }
 
+  /** Group Management */
+  async getGroupMembers(groupId: string): Promise<any[]> {
+    const members = await this.db.query.member.findMany({
+      where: eq(member.organizationId, groupId),
+      with: {
+        user: true,
+      },
+    });
+    return members.map((member) => member.user);
+  }
+
   async addUserToGroup(groupId: string, data: Pick<CreateMemberSchema, "userId" | "role"> & { email: string }): Promise<void> {
-    console.log("Adding user to group:", groupId, data);
     const _user = await this.db.query.user.findFirst({
       where: eq(user.email, data.email),
     });
-    console.log("Found user:", _user);
 
     if (!_user) {
       throw new NotFoundError("User not found with email");
     }
-    console.log("User ID to add:", _user.id);
 
     const result = await auth.api.addMember({
       body: {
@@ -60,6 +68,17 @@ class GroupService {
     console.log(result);
 
     return;
+  }
+
+  async removeUserFromGroup(groupId: string, userId: string): Promise<void> {
+    const result = await auth.api.removeMember({
+      body: {
+        memberIdOrEmail: userId,
+        organizationId: groupId,
+      },
+    });
+
+    console.log(result);
   }
 
   async getRobots(groupId: string): Promise<RobotDetail[]> {

@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { integer, pgEnum, pgTable, text, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { organization, user } from "./auth-schema";
+import { member, organization, user } from "./auth-schema";
 
 export const ownerRoleEnum = pgEnum("owner_role", ["group", "user"]);
 
@@ -37,6 +37,16 @@ export const robotSettingsRelations = relations(RobotSettingsTable, ({ one }) =>
   robot: one(RobotsTable, {
     fields: [RobotSettingsTable.robotId],
     references: [RobotsTable.id],
+  }),
+}));
+export const memberRelations = relations(member, ({ one }) => ({
+  user: one(user, {
+    fields: [member.userId],
+    references: [user.id],
+  }),
+  group: one(organization, {
+    fields: [member.organizationId],
+    references: [organization.id],
   }),
 }));
 export const robotSettings = createSelectSchema(RobotSettingsTable);

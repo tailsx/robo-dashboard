@@ -2,7 +2,8 @@ import { Table, TableBody, TableCell, TableHeader, TableRow, TableHead } from "@
 import { Button } from "@/components/ui/button";
 import { useGroups } from "./hooks/use-groups";
 import { Link } from "react-router";
-import { GroupAddMember } from "./group-add-member";
+import { useEffect, useState } from "react";
+import { appClient } from "@/lib/app";
 
 type GroupMembersTableProps = {
   data: any;
@@ -34,8 +35,34 @@ function GroupMembersTable({ data }: GroupMembersTableProps) {
   );
 }
 
-export function GroupTableFull() {
-  const { isLoading, groups } = useGroups();
+function useGroupMembers(groupId: string) {
+  const [members, setMembers] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const data = await appClient.getGroupMembers(groupId);
+        console.log(data)
+        setMembers(data);
+      } catch (error) {
+        console.error("Error fetching group members:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMembers();
+  }, []);
+
+  return { members, isLoading };
+}
+
+type GroupTableFullProps = {
+  groupId: string;
+}
+export function GroupTableFull({groupId}: GroupTableFullProps) {
+  const { isLoading, members } = useGroupMembers(groupId);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -43,8 +70,7 @@ export function GroupTableFull() {
 
   return (
     <>
-      <GroupAddMember />
-      <GroupMembersTable data={groups} />
+      <GroupMembersTable data={members} />
     </>
   );
 }

@@ -80,15 +80,27 @@ class AppClient {
     return res;
   }
 
+  // Groups
   async getGroupDetail(groupId: string): Promise<GroupDetailFull> {
     const res = await this.fetcher.get<GroupDetailFull>(`/groups/${groupId}`);
 
     return res;
   }
 
+  async getGroupMembers(groupId: string) {
+    const res = await this.fetcher.get(`/groups/${groupId}/users`);
+    return res;
+  }
+
   async addUserToGroup(email: string, groupId: string) {
     const res = await this.fetcher.post(`/groups/${groupId}/users`, { email });
 
+    console.log(res);
+    return res;
+  }
+
+  async removeUserFromGroup(userId: string, groupId: string) {
+    const res = await this.fetcher.delete(`/groups/${groupId}/users/${userId}`);
     console.log(res);
     return res;
   }

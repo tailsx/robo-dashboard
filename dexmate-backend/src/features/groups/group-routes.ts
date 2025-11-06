@@ -6,6 +6,28 @@ import { GroupService } from "#features/groups/group-service.js";
 const router = Router();
 const groupService = new GroupService();
 
+router.get(
+  "/groups/:groupId",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const groupId = req.params.groupId;
+    const result = await groupService.getGroupDetail(groupId);
+
+    res.success(result);
+  })
+);
+
+router.get(
+  "/groups/:groupId/users",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const groupId = req.params.groupId;
+    const result = await groupService.getGroupMembers(groupId);
+
+    res.success(result);
+  })
+);
+
 router.post(
   "/groups/:groupId/users",
   requireAuth,
@@ -18,12 +40,13 @@ router.post(
   })
 );
 
-router.get(
-  "/groups/:groupId",
+router.delete(
+  "/groups/:groupId/users/:userId",
   requireAuth,
   asyncHandler(async (req, res) => {
     const groupId = req.params.groupId;
-    const result = await groupService.getGroupDetail(groupId);
+    const userId = req.params.userId;
+    const result = await groupService.removeUserFromGroup(groupId, userId);
 
     res.success(result);
   })
