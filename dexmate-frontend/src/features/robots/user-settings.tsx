@@ -6,7 +6,7 @@ function UserSettings() {
 
   return (
     <LoadingSwapper isLoading={isLoading}>
-      <div>{JSON.stringify(settings)}</div>
+      <pre>{JSON.stringify(settings?.json, null, 2)}</pre>
     </LoadingSwapper>
   );
 }

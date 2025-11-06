@@ -6,9 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingSwapper } from "@/components/loading-swapper";
 import { appClient } from "@/lib/app";
-import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { TrashIcon } from "lucide-react";
 
 const createUserSettingSchema = z.object({
   settings: z.array(
@@ -46,7 +45,7 @@ function CreateUserSettingForm({ robotId }: CreateUserSettingFormProps) {
 
     try {
       const res = await appClient.createUserRobotSetting(robotId, json);
-      console.log(res);
+      toast.success("User settings created successfully");
     } catch (error) {
       toast.error("Failed to create user settings");
     }
@@ -58,14 +57,14 @@ function CreateUserSettingForm({ robotId }: CreateUserSettingFormProps) {
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
         {fields.map((field, index) => (
-          <div key={field.id}>
+          <div key={field.id} className="grid grid-cols-[1fr_1fr_40px]">
             <FormField
               control={form.control}
               name={`settings.${index}.key`}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} placeholder="Key"/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,21 +76,21 @@ function CreateUserSettingForm({ robotId }: CreateUserSettingFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} placeholder="Value" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button type="button" variant="destructive" onClick={() => remove(index)}>
-              Remove
+              <TrashIcon />
             </Button>
           </div>
         ))}
         <Button type="button" onClick={() => append({ key: "", value: "" })}>
-          Add Setting
+          Add More 
         </Button>
-        <div>
+        <div className="flex justify-end">
           <Button type="submit">
             <LoadingSwapper isLoading={isSubmitting}>Create Robot</LoadingSwapper>
           </Button>

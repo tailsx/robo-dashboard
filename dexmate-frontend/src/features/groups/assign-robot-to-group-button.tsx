@@ -2,11 +2,14 @@ import { Button } from "@/components/ui/button";
 import { GroupDropdown } from "./group-dropdown";
 import { appClient } from "@/lib/app";
 import { toast } from "sonner";
+import { useRobotDetail } from "../providers/robot-details-provider";
 
 type AssignRobotButtonProps = {
   robotId: string;
 };
 function AssignRobotButton({ robotId }: AssignRobotButtonProps) {
+  const { robot } = useRobotDetail();
+  console.log("AssignRobotButton robot:", robot);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -22,8 +25,8 @@ function AssignRobotButton({ robotId }: AssignRobotButtonProps) {
     toast.success("Robot assigned to group successfully");
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <GroupDropdown />
+    <form className="grid grid-cols-2 w-[350px]" onSubmit={handleSubmit}>
+      <GroupDropdown defaultValue={robot?.groupId} />
       <Button>Assign</Button>
     </form>
   );

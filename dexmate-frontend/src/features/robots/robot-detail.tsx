@@ -1,10 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRobotDetail } from "../providers/robot-details-provider";
 
-type RobotsDetailProps = {
-  robotId: string;
-};
-function RobotsDetail({ robotId }: RobotsDetailProps) {
+type RobotsDetailProps = {};
+function RobotsDetail({}: RobotsDetailProps) {
   const { robot, isLoading } = useRobotDetail();
 
   if (isLoading) {
@@ -17,7 +15,6 @@ function RobotsDetail({ robotId }: RobotsDetailProps) {
 
   return (
     <div>
-      Robots Detail Page: {robotId}
       <Card>
         <CardHeader>
           <CardTitle>{robot?.name}</CardTitle>

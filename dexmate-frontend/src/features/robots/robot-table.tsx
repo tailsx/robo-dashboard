@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCaption, TableCell, TableHeader, TableRow, TableHead } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHeader, TableRow, TableHead } from "@/components/ui/table";
 import type { RobotDetail } from "@/lib/app";
 import { Button } from "@/components/ui/button";
 import { useRobots } from "@/features/providers/robots-provider";
@@ -12,7 +12,7 @@ function RobotTable({ data }: RobotTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
+          <TableHead className="w-[100px]">Name</TableHead>
           <TableHead>Method</TableHead>
           <TableHead className="text-right">Amount</TableHead>
         </TableRow>

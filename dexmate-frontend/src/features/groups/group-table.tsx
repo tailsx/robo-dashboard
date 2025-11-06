@@ -1,8 +1,8 @@
 import { Table, TableBody, TableCell, TableHeader, TableRow, TableHead } from "@/components/ui/table";
-import type { RobotDetail } from "@/lib/app";
 import { Button } from "@/components/ui/button";
 import { useGroups } from "./hooks/use-groups";
 import { Link } from "react-router";
+import { EyeIcon, TrashIcon } from "lucide-react";
 
 type GroupTableProps = {
   data: ReturnType<typeof useGroups>["groups"];
@@ -23,9 +23,13 @@ function GroupTable({ data }: GroupTableProps) {
               <TableCell className="font-medium">{name}</TableCell>
               <TableCell className="text-right">
                 <Link to={`/groups/${id}`}>
-                  <Button>View</Button>
+                  <Button className="cursor-pointer" variant="ghost">
+                    <EyeIcon />
+                  </Button>
                 </Link>
-                <Button>Delete</Button>
+                <Button className="cursor-pointer" variant="ghost" data-button-action="delete">
+                  <TrashIcon />
+                </Button>
               </TableCell>
             </TableRow>
           ))}

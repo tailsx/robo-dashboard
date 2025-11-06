@@ -1,10 +1,11 @@
 import { LoadingSwapper } from "@/components/loading-swapper";
 import { NotFoundDetail } from "@/components/not-found-detail";
+import { PageSection } from "@/components/page-section";
 import { AssignRobotButton } from "@/features/groups/assign-robot-to-group-button";
 import { RobotDetailProvider, useRobotDetail } from "@/features/providers/robot-details-provider";
 import { RobotsDetail } from "@/features/robots/robot-detail";
 import { UserSettings } from "@/features/robots/user-settings";
-import { CreateUserSettingForm } from "@/features/robots/user-settings-form";
+import { UserSettingDialog } from "@/features/robots/user-settings-dialog";
 import { useParams } from "react-router";
 
 function RobotsDetailPage() {
@@ -12,11 +13,17 @@ function RobotsDetailPage() {
   return (
     <RobotDetailProvider robotId={robotId || ""}>
       <RobotsDetailExist>
-        <RobotsDetail robotId={robotId || ""}></RobotsDetail>
+        <RobotsDetail />
 
-        <AssignRobotButton robotId={robotId || ""} />
-        <CreateUserSettingForm robotId={robotId || ""} />
-        <UserSettings />
+        <PageSection name="Group Assignment">
+          <AssignRobotButton robotId={robotId || ""} />
+        </PageSection>
+        <PageSection name="User Settings">
+          <div className="">
+            <UserSettingDialog robotId={robotId || ""} />
+            <UserSettings />
+          </div>
+        </PageSection>
       </RobotsDetailExist>
     </RobotDetailProvider>
   );
