@@ -109,6 +109,12 @@ class AppClient {
     return res;
   }
 
+  async getGroupsWithRole(): Promise<GroupDetailFull[]> {
+    const res = await this.fetcher.get<GroupDetailFull[]>(`/groups`);
+
+    return res;
+  }
+
   async getGroupMembers(groupId: string) {
     const res = await this.fetcher.get(`/groups/${groupId}/users`);
     return res;

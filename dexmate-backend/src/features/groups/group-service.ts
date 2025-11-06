@@ -10,10 +10,6 @@ import { auth } from "#lib/auth.js";
 
 const userSchema = createSelectSchema(user);
 
-type CreateRobotSchema = z.infer<typeof createRobotSchema>;
-type RobotSchema = z.infer<typeof robotSchema>;
-type RobotSettings = z.infer<typeof robotSettings>;
-type UserGroups = z.infer<typeof userGroups>;
 type CreateMemberSchema = z.infer<typeof createMemberSchema>;
 
 const groupSchema = createSelectSchema(organization);
@@ -22,11 +18,26 @@ type GroupInfo = z.infer<typeof groupSchema>;
 type GroupDetailFull = GroupInfo;
 type GroupMember = z.infer<typeof user> & { role: string };
 type User = z.infer<typeof userSchema>;
+type RobotDetail = z.infer<typeof robotSchema>;
 
 class GroupService {
   private db: Database;
   constructor() {
     this.db = db;
+  }
+
+  async getGroupsWithRole(userId: string) {
+    const groups = await this.db.query.member.findMany({
+      where: eq(member.userId, userId),
+      with: {
+        group: true,
+      },
+    });
+
+    return groups.map((mg) => ({
+      ...mg.group,
+      role: mg.role,
+    }));
   }
 
   async getGroupDetail(groupId: string): Promise<GroupDetailFull> {
@@ -88,7 +99,7 @@ class GroupService {
   }
 
   async getRobots(groupId: string): Promise<RobotDetail[]> {
-    const robots = await this.db.query.RobotsTable.findAll({
+    const robots = await this.db.query.RobotsTable.findMany({
       where: eq(RobotsTable.groupId, groupId),
     });
 
@@ -101,9 +112,10 @@ class GroupService {
       .set({
         groupId: groupId,
       })
-      .where(eq(RobotsTable.id, robotId));
+      .where(eq(RobotsTable.id, robotId))
+      .returning();
 
-    return robot;
+    return robot[0];
   }
 }
 

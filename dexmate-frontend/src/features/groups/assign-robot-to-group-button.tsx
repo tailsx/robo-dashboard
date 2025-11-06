@@ -9,15 +9,12 @@ type AssignRobotButtonProps = {
 };
 function AssignRobotButton({ robotId }: AssignRobotButtonProps) {
   const { robot } = useRobotDetail();
-  console.log("AssignRobotButton robot:", robot);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("Assigning robot", robotId);
-    console.log(e.currentTarget);
     const selectElement = e.currentTarget.querySelector("select") as HTMLSelectElement;
     const selectedGroupId = selectElement.value;
-    console.log("to group", selectedGroupId);
 
     const res = await appClient.assignRobotToGroup(robotId, selectedGroupId);
     console.log("Response:", res);

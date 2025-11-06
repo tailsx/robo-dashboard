@@ -7,6 +7,17 @@ const router = Router();
 const groupService = new GroupService();
 
 router.get(
+  "/groups",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const user = req.user!;
+    const result = await groupService.getGroupsWithRole(user.id);
+
+    res.success(result);
+  })
+);
+
+router.get(
   "/groups/:groupId",
   requireAuth,
   asyncHandler(async (req, res) => {
