@@ -13,14 +13,21 @@ import { GroupsDetailPage } from "./pages/group-detail-page";
 
 export const routes: RouteObject[] = [
   {
+    path: "/login",
+
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <LoginPage />,
+      },
+    ],
+  },
+  {
     path: "/",
     element: <AppLayout />,
     errorElement: <NotFoundPage />,
     children: [
-      {
-        path: "login",
-        element: <LoginPage />,
-      },
       {
         element: <AuthenticatedRoute />,
         children: [

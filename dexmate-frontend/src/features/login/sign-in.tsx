@@ -2,13 +2,14 @@ import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingSwapper } from "@/components/loading-swapper";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { SectionHeading } from "@/components/typography";
 
 const signInSchema = z.object({
   email: z.string().email(),
@@ -50,13 +51,14 @@ function SignInForm() {
 
   return (
     <Form {...form}>
+      <SectionHeading>Welcome Back</SectionHeading>
       <form className="space-y-4" onSubmit={form.handleSubmit(handleSignUp)}>
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -70,7 +72,7 @@ function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input {...field} type="password" />
               </FormControl>
@@ -79,7 +81,7 @@ function SignInForm() {
           )}
         />
         <Button type="submit">
-          <LoadingSwapper isLoading={isSubmitting}>Sign Up</LoadingSwapper>
+          <LoadingSwapper isLoading={isSubmitting}>Sign In</LoadingSwapper>
         </Button>
       </form>
     </Form>
@@ -89,7 +91,9 @@ function SignInForm() {
 function SignInCard() {
   return (
     <Card>
-      <SignInForm />
+      <CardContent>
+        <SignInForm />
+      </CardContent>
     </Card>
   );
 }

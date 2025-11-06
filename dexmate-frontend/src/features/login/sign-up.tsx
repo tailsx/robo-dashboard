@@ -2,12 +2,13 @@ import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingSwapper } from "@/components/loading-swapper";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { SectionHeading } from "@/components/typography";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -39,7 +40,7 @@ function SignUpForm() {
         },
         onSuccess: () => {
           console.log("Sign up successful, please check your email.");
-        }
+        },
       }
     );
 
@@ -50,6 +51,7 @@ function SignUpForm() {
 
   return (
     <Form {...form}>
+      <SectionHeading>Create an Account</SectionHeading>
       <form className="space-y-4" onSubmit={form.handleSubmit(handleSignUp)}>
         <FormField
           control={form.control}
@@ -69,7 +71,7 @@ function SignUpForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -83,7 +85,7 @@ function SignUpForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input {...field} type="password" />
               </FormControl>
@@ -102,7 +104,9 @@ function SignUpForm() {
 function SignUpCard() {
   return (
     <Card>
-      <SignUpForm />
+      <CardContent>
+        <SignUpForm />
+      </CardContent>
     </Card>
   );
 }

@@ -1,10 +1,13 @@
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger as BaseTabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SignUpCard } from "./sign-up";
 import { SignInCard } from "./sign-in";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { authClient } from "@/lib/auth-client";
+
+function TabsTrigger(props: React.ComponentProps<typeof BaseTabsTrigger>) {
+  return <BaseTabsTrigger className="flex-1 bg-white! data-[state=active]:bg-secondary! data-[state=inactive]:opacity-20" {...props} />;
+}
 
 export function Login() {
   const navigate = useNavigate();
@@ -23,7 +26,6 @@ export function Login() {
         <TabsTrigger value="signin">Sign In</TabsTrigger>
         <TabsTrigger value="signup">Sign Up</TabsTrigger>
       </TabsList>
-      <Card>Login Component</Card>;
       <TabsContent value="signin">
         <SignInCard />
       </TabsContent>

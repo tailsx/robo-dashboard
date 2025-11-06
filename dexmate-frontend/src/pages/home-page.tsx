@@ -30,18 +30,10 @@ function HomePageContent() {
   return (
     <LoadingSwapper isLoading={isGroupLoading || isRobotLoading}>
       <HomePageSection name="Robots" path="/robots">
-        {robots?.map((robot) => (
-          <RobotCard key={robot.id} robot={robot} />
-        ))}
+        {robots?.length > 0 ? robots?.map((robot) => <RobotCard key={robot.id} robot={robot} />) : <div>No robots found.</div>}
       </HomePageSection>
       <HomePageSection name="Groups" path="/groups">
-        {groups ? (
-          groups?.map((group) => (
-            <GroupCard key={group.id} group={group} />
-          ))
-        ) : (
-          <div>No groups found.</div>
-        )}
+        {groups && groups?.length > 0 ? groups?.map((group) => <GroupCard key={group.id} group={group} />) : <div>No groups found.</div>}
       </HomePageSection>
     </LoadingSwapper>
   );
