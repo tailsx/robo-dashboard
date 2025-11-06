@@ -31,6 +31,13 @@ type UserRobotSettingResponse = {
   settings: string;
 };
 
+
+
+export type GroupDetailFull = {
+
+}
+
+
 class AppClient {
   private fetcher: Fetcher;
 
@@ -73,9 +80,16 @@ class AppClient {
   }
 
   async createUserRobotSetting(robotId: string, json: Record<string, string>): Promise<void> {
-    const res = this.fetcher.post<void>(`/robots/${robotId}/settings/user`, json);
+    const res = await this.fetcher.post<void>(`/robots/${robotId}/settings/user`, json);
 
     return res;
+  }
+
+  async getGroupDetail(groupId: string): Promise<GroupDetailFull> {
+    const res = await this.fetcher.get<GroupDetailFull>(`/groups/${groupId}`);
+
+
+    return res
   }
 }
 

@@ -1,24 +1,32 @@
 import { Router } from "express";
-import { RobotService } from "./robot-service.js";
-import { DatabaseError, NotFoundError } from "#utils/errors.js";
 import { asyncHandler } from "#middleware/async-handler.js";
 import { requireAuth } from "#middleware/auth-middleware.js";
-import { appendGroups } from "#middleware/groups-middleware.js";
 import { GroupService } from "#features/groups/group-service.js";
 
 const router = Router();
 const groupService = new GroupService();
 
 router.post(
-  "/",
+  "/groups",
   requireAuth,
   asyncHandler(async (req, res) => {
     const user = req.user!;
     const body = req.body;
     const groups = req.userGroups || [];
-    const res = await groupService.addUserToGroup();
+    const result = await groupService.addUserToGroup();
 
-    res.success(robots);
+    res.success(result);
+  })
+);
+
+router.get(
+  "/groups/:groupId",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const groupId = req.params.groupId;
+    const result = await groupService.getGroupDetail(groupId);
+
+    res.success(result);
   })
 );
 
@@ -29,7 +37,7 @@ router.post(
     const body = req.body;
     const groupId = req.params.groupId;
 
-    const res = await groupService.addRobotToGroup(body.robotId, groupId);
+    const result = await groupService.addRobotToGroup(body.robotId, groupId);
 
     res.success({ isSuccessful: true });
   })
@@ -40,9 +48,9 @@ router.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     const groupId = req.params.groupId;
-    const res = await groupService.getRobots(groupId);
+    const result = await groupService.getRobots(groupId);
 
-    res.success(res);
+    res.success(result);
   })
 );
 

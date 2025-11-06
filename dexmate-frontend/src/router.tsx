@@ -8,6 +8,8 @@ import { AppLayout } from "./layouts/app-layout";
 import { RobotsPage } from "./pages/robots-page";
 import { GroupsPage } from "./pages/groups-page";
 import { RobotsDetailPage } from "./pages/robots-detail-page";
+import { AuthenticatedRoute } from "./features/login/authenticate";
+import { GroupsDetailPage } from "./pages/group-detail-page";
 
 export const routes: RouteObject[] = [
   {
@@ -16,24 +18,33 @@ export const routes: RouteObject[] = [
     errorElement: <NotFoundPage />,
     children: [
       {
-        index: true,
-        element: <HomePage />,
-      },
-      {
         path: "login",
         element: <LoginPage />,
       },
       {
-        path: "robots",
-        element: <RobotsPage />,
-      },
-      {
-        path: "robots/:robotId",
-        element: <RobotsDetailPage />,
-      },
-      {
-        path: "groups",
-        element: <GroupsPage />,
+        element: <AuthenticatedRoute />,
+        children: [
+          {
+            index: true,
+            element: <HomePage />,
+          },
+          {
+            path: "robots",
+            element: <RobotsPage />,
+          },
+          {
+            path: "robots/:robotId",
+            element: <RobotsDetailPage />,
+          },
+          {
+            path: "groups",
+            element: <GroupsPage />,
+          },
+          {
+            path: "groups/:groupId",
+            element: <GroupsDetailPage />,
+          },
+        ],
       },
     ],
   },

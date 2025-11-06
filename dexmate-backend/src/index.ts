@@ -4,6 +4,7 @@ import cors from "cors";
 import type { CorsOptions } from "cors";
 
 import { router as robotRoutes } from "./features/robots/robot-routes.js";
+import { router as groupRoutes } from "./features/groups/group-routes.js";
 import { auth } from "#lib/auth.js";
 import { errorHandler } from "#middleware/error-handler.js";
 import { responseHandler } from "#middleware/response-handler.js";
@@ -36,6 +37,7 @@ app.all("/api/auth/{*any}", toNodeHandler(auth));
 
 // app routes
 app.use("/robots", robotRoutes);
+app.use(groupRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
